@@ -35,7 +35,7 @@ class MasterItemsController extends Controller
             $data_search = $data_search->where('harga_beli', '<=', $hargamax);
         }
 
-        $data_search = $data_search->select('kode', 'nama', 'jenis', 'harga_beli', 'laba', 'supplier')->orderBy('id')->get();
+        $data_search = $data_search->select('id', 'kode', 'nama', 'jenis', 'harga_beli', 'laba', 'supplier', 'foto')->orderBy('id')->get();
 
         return response()->json([
             'status' => 200,
@@ -67,6 +67,12 @@ class MasterItemsController extends Controller
 
     public function formSubmit(Request $request, $method, $id = 0)
     {
+        if ($request->has('harga_beli')) {
+            $request->merge([
+                'harga_beli' => preg_replace('/[^0-9]/', '', (string)$request->harga_beli)
+            ]);
+        }
+
         $request->validate([
             'nama' => 'required',
             'harga_beli' => 'required|numeric',

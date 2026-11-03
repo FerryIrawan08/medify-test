@@ -20,7 +20,7 @@
                         <tr>
                             <th>Harga Beli</th>
                             <td>:</td>
-                            <td>{{$data->harga_beli}}</td>
+                            <td class="fw-bold">Rp {{ number_format($data->harga_beli, 0, ',', '.') }}</td>
                         </tr>
                         <tr>
                             <th>Laba</th>
@@ -30,7 +30,7 @@
                         <tr>
                             <th>Harga Jual</th>
                             <td>:</td>
-                            <td>{{$data->harga_beli + $data->harga_beli * $data->laba / 100 }}</td>
+                            <td class="fw-bold text-success">Rp {{ number_format($data->harga_beli + ($data->harga_beli * $data->laba / 100), 0, ',', '.') }}</td>
                         </tr>
                         <tr>
                             <th>Supplier</th>

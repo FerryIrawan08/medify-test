@@ -4,8 +4,10 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="form-group mb-2">
-                <a href="{{url('kategoris/form/new')}}" class="btn btn-secondary">+ Kategori Baru</a>
+            <div class="form-group mb-2 d-flex justify-content-end">
+                <a href="{{url('kategoris/form/new')}}" class="btn btn-secondary">
+                    <i class="bi bi-plus-lg me-1"></i> DataTables warning: table id=table - Requested unknown parameter '7' for row 4, column 7. For more information about this error, please see http://datatables.net/tn/4 Kategori Baru
+                </a>
             </div>
             <div class="card">
                 <div class="card-header">Daftar Kategori Items</div>

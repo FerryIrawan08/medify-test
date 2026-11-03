@@ -3,10 +3,15 @@
 <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
 
 <script>
+    $.fn.dataTable.ext.errMode = 'none';
+
     $(document).ready(function() {
         $('#table').DataTable({
             searching: false,
             order: [[0, 'desc']],
+            columnDefs: [
+                { defaultContent: '', targets: '_all' }
+            ]
         });
         getData();
     });
@@ -32,20 +37,22 @@
                 nama: filter_nama
             },
             success: function(results) {
-                var data = results.data;
+                var data = results.data || [];
+                var rows = [];
 
                 $.each(data, function(index, item) {
-                    var array_temp = [];
-                    var kode = item.kode;
+                    var kode = item.kode || '';
                     var viewBtn = `<a href="{{url('kategoris/view/')}}/` + kode + `" class="btn btn-primary btn-sm">View</a>`;
 
-                    array_temp.push(item.kode);
-                    array_temp.push(item.nama);
-                    array_temp.push(item.items_count !== undefined ? item.items_count : 0);
-                    array_temp.push(viewBtn);
-
-                    dataTableObj.row.add(array_temp).draw(true);
+                    rows.push([
+                        kode,
+                        item.nama || '',
+                        item.items_count !== undefined ? item.items_count : 0,
+                        viewBtn
+                    ]);
                 });
+
+                dataTableObj.rows.add(rows).draw();
                 $('#loading-filter').hide();
             },
             error: function(xhr, textStatus, errorThrown) {
@@ -60,4 +67,3 @@
         });
     }
 </script>
-
