@@ -4,8 +4,10 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="form-group mb-2">
-                <a href="{{url('master-items')}}" class="btn btn-secondary">Kembali ke Daftar Item</a>
+            <div class="form-group mb-2 d-flex justify-content-end">
+                <a href="{{url('master-items')}}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left me-1"></i> Kembali ke Daftar Item
+                </a>
             </div>
             <div class="card">
 

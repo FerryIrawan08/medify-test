@@ -20,6 +20,10 @@
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
+    <!-- Global jQuery & SweetAlert2 -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     @yield('css')
 </head>
 
@@ -109,10 +113,24 @@
         </main>
     </div>
 
-    <!-- Global jQuery & SweetAlert2 -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        // Global Rupiah Formatter Helper
+        window.formatRupiah = function(number) {
+            if (number === null || number === undefined || number === '') return 'Rp 0';
+            var val = Number(number.toString().replace(/[^0-9]/g, '')) || 0;
+            return 'Rp ' + val.toLocaleString('id-ID');
+        };
+
+        // Global Real-time Rupiah Thousand Separator Mask (e.g. 900000 -> 900.000)
+        $(document).on('input', '.rupiah-input, input[name="harga_beli"], input[name="harga"]', function() {
+            var raw = $(this).val().replace(/[^0-9]/g, '');
+            if (raw) {
+                $(this).val(Number(raw).toLocaleString('id-ID'));
+            } else {
+                $(this).val('');
+            }
+        });
+
         $(document).ready(function() {
             // Flash Message SweetAlert
             @if (session('success'))

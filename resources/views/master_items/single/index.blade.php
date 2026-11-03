@@ -4,8 +4,10 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="form-group mb-2">
-                <a href="{{url('master-items')}}" class="btn btn-secondary">Kembali ke Daftar Item</a>
+            <div class="form-group mb-2 d-flex justify-content-end">
+                <a href="{{url('master-items')}}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left me-1"></i> Kembali ke Daftar Item
+                </a>
             </div>
             <div class="card">
                 <div class="card-header">Master Item</div>
@@ -69,7 +71,7 @@
                             </td>
                         </tr>
                     </table>
-                    <div class="d-flex align-items-center gap-2 mt-3">
+                    <div class="d-flex justify-content-end align-items-center gap-2 mt-4 pt-3 border-top">
                         <a class="btn btn-info text-white" href="{{url('master-items/form/edit')}}/{{$data->id}}">
                             <i class="bi bi-pencil-square me-1"></i> Edit
                         </a>

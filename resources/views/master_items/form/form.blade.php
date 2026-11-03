@@ -26,7 +26,7 @@
         <label class="form-label fw-semibold">Harga Beli <span class="text-danger">*</span></label>
         <div class="input-group">
             <span class="input-group-text fw-bold">Rp</span>
-            <input type="text" class="form-control" name="harga_beli" id="harga_beli" required placeholder="0" 
+            <input type="text" class="form-control rupiah-input" name="harga_beli" id="harga_beli" required placeholder="0" 
                    value="{{ old('harga_beli', !empty($item->harga_beli) ? number_format($item->harga_beli, 0, ',', '.') : '') }}">
         </div>
     </div>
@@ -112,13 +112,13 @@
         @endif
     </div>
 
-    <div class="d-flex align-items-center gap-2">
+    <div class="d-flex justify-content-end align-items-center gap-2 mt-4 pt-3 border-top">
+        <a href="{{ url('master-items') }}" class="btn btn-outline-secondary px-3">
+            Batal
+        </a>
         <button type="submit" class="btn btn-primary px-4" id="btnSubmitItem">
             <i class="bi bi-save me-1"></i> Simpan Data
         </button>
-        <a href="{{ url('master-items') }}" class="btn btn-outline-secondary">
-            Batal
-        </a>
     </div>
 </form>
 
@@ -126,14 +126,21 @@
     function updateHargaJualPreview() {
         var rawBeli = ($('#harga_beli').val() || '').toString().replace(/[^0-9]/g, '');
         var beli = parseFloat(rawBeli) || 0;
-        var laba = parseFloat($('#laba').val()) || 0;
+        var rawLaba = ($('#laba').val() || '').toString().replace(/[^0-9.]/g, '');
+        var laba = parseFloat(rawLaba) || 0;
+
+        if (beli === 0) {
+            $('#preview_harga_jual').text('Rp 0');
+            return;
+        }
+
         var jual = Math.round(beli + (beli * laba / 100));
         $('#preview_harga_jual').text('Rp ' + jual.toLocaleString('id-ID'));
     }
 
     $(document).ready(function() {
-        // Real-time Rupiah input masking
-        $('#harga_beli').on('input', function() {
+        // Real-time Rupiah input masking and preview update
+        $(document).on('input change keyup', '#harga_beli', function() {
             var raw = $(this).val().replace(/[^0-9]/g, '');
             if (raw) {
                 $(this).val(Number(raw).toLocaleString('id-ID'));
@@ -143,7 +150,7 @@
             updateHargaJualPreview();
         });
 
-        $('#laba').on('input', function() {
+        $(document).on('input change keyup', '#laba', function() {
             updateHargaJualPreview();
         });
 

@@ -21,9 +21,14 @@
         <input type="text" class="form-control" name="nama" required value="{{ old('nama', $item->nama ?? '') }}" placeholder="Contoh: Obat Generik">
     </div>
 
-    <button class="btn btn-primary mt-2">
-        <i class="bi bi-check-circle me-1"></i> Submit
-    </button>
+    <div class="d-flex justify-content-end align-items-center gap-2 mt-4 pt-3 border-top">
+        <a href="{{ url('kategoris') }}" class="btn btn-outline-secondary px-3">
+            Batal
+        </a>
+        <button type="submit" class="btn btn-primary px-4" id="btnSubmitKategori">
+            <i class="bi bi-save me-1"></i> Simpan Data
+        </button>
+    </div>
 </form>
 
 <script>
