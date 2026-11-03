@@ -10,14 +10,29 @@
             searching: false,
             order: [[0, 'desc']],
             columnDefs: [
-                { defaultContent: '', targets: '_all' }
+                { defaultContent: '', targets: '_all' },
+                { orderable: false, targets: [3] }
             ]
         });
-        getData();
-    });
 
-    $('.btn-get-data').click(function() {
         getData();
+
+        // Debounce filter on typing (350ms delay)
+        var filterDebounceTimer = null;
+        $(document).on('input keyup', '.filter-debounce', function() {
+            clearTimeout(filterDebounceTimer);
+            $('#loading-filter').show();
+            filterDebounceTimer = setTimeout(function() {
+                getData();
+            }, 350);
+        });
+
+        // Reset filter button
+        $('#btn-reset-filter').click(function() {
+            $('#filter-kode').val('');
+            $('#filter-nama').val('');
+            getData();
+        });
     });
 
     function getData() {
@@ -25,6 +40,7 @@
         var dataTableObj = $('#table').DataTable();
         var filter_kode = $('#filter-kode').val();
         var filter_nama = $('#filter-nama').val();
+        
         dataTableObj.clear().draw();
 
         $.ajax({
@@ -42,13 +58,13 @@
 
                 $.each(data, function(index, item) {
                     var kode = item.kode || '';
-                    var viewBtn = `<a href="{{url('kategoris/view/')}}/` + kode + `" class="btn btn-primary btn-sm">View</a>`;
+                    var viewBtn = `<a href="{{url('kategoris/view/')}}/` + kode + `" class="btn btn-primary btn-sm px-3">View</a>`;
 
                     rows.push([
-                        kode,
+                        `<strong>${kode}</strong>`,
                         item.nama || '',
-                        item.items_count !== undefined ? item.items_count : 0,
-                        viewBtn
+                        `<span class="badge bg-secondary">${item.items_count !== undefined ? item.items_count : 0} Item</span>`,
+                        `<div class="text-center">${viewBtn}</div>`
                     ]);
                 });
 

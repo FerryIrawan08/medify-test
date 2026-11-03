@@ -22,7 +22,7 @@ class KategoriController extends Controller
         $data_search = Kategori::withCount('items');
 
         if ($request->filled('kode')) {
-            $data_search = $data_search->where('kode', $kode);
+            $data_search = $data_search->where('kode', 'LIKE', '%' . $kode . '%');
         }
         if ($request->filled('nama')) {
             $data_search = $data_search->where('nama', 'LIKE', '%' . $nama . '%');
@@ -83,13 +83,15 @@ class KategoriController extends Controller
         $kategori->kode = $kode;
         $kategori->save();
 
-        return redirect('kategoris');
+        $msg = $method == 'new' ? 'Kategori baru berhasil ditambahkan!' : 'Kategori berhasil diperbarui!';
+        return redirect('kategoris')->with('success', $msg);
     }
 
     public function delete($id)
     {
-        Kategori::findOrFail($id)->delete();
-        return redirect('kategoris');
+        $kategori = Kategori::findOrFail($id);
+        $kategori->delete();
+        return redirect('kategoris')->with('success', 'Kategori berhasil dihapus!');
     }
 
     public function downloadPdf($kode)

@@ -9,7 +9,7 @@
                     <i class="bi bi-file-earmark-excel me-1"></i> Download Excel
                 </a>
                 <a href="{{url('master-items/form/new')}}" class="btn btn-secondary">
-                    <i class="bi bi-plus-lg me-1"></i>  Master Items Baru
+                    <i class="bi bi-plus-lg me-1"></i> Master Items Baru
                 </a>
             </div>
             <div class="card">

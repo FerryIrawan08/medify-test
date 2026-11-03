@@ -6,12 +6,16 @@
         <div class="col-md-10">
             <div class="form-group mb-2 d-flex justify-content-between align-items-center">
                 <a href="{{url('kategoris')}}" class="btn btn-secondary">Kembali ke Daftar Kategori</a>
-                <div>
-                    <a href="{{url('kategoris/pdf/' . $data->kode)}}" class="btn btn-danger" target="_blank">
-                        Download PDF
+                <div class="d-flex align-items-center gap-2">
+                    <a href="{{url('kategoris/pdf/' . $data->kode)}}" class="btn btn-outline-danger" target="_blank">
+                        <i class="bi bi-file-earmark-pdf me-1"></i> Download PDF
                     </a>
-                    <a class="btn btn-info" href="{{url('kategoris/form/edit')}}/{{$data->id}}">Edit</a>
-                    <a class="btn btn-danger" href="{{url('kategoris/delete')}}/{{$data->id}}" onclick="return confirm('Apakah Anda yakin ingin menghapus kategori ini?');">Delete</a>
+                    <a class="btn btn-info text-white" href="{{url('kategoris/form/edit')}}/{{$data->id}}">
+                        <i class="bi bi-pencil-square me-1"></i> Edit
+                    </a>
+                    <a class="btn btn-danger btn-delete" href="{{url('kategoris/delete')}}/{{$data->id}}" data-confirm-text="Kategori '{{ $data->nama }}' akan dipindahkan ke tempat sampah.">
+                        <i class="bi bi-trash me-1"></i> Delete
+                    </a>
                 </div>
             </div>
 

@@ -21,6 +21,29 @@
         <input type="text" class="form-control" name="nama" required value="{{ old('nama', $item->nama ?? '') }}" placeholder="Contoh: Obat Generik">
     </div>
 
-    <button class="btn btn-primary mt-2">Submit</button>
+    <button class="btn btn-primary mt-2">
+        <i class="bi bi-check-circle me-1"></i> Submit
+    </button>
 </form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var form = document.querySelector('form');
+        if (form) {
+            form.addEventListener('submit', function() {
+                var nama = document.querySelector('input[name="nama"]');
+                if (nama && nama.value.trim() !== '') {
+                    Swal.fire({
+                        title: 'Menyimpan Kategori...',
+                        text: 'Mohon tunggu sebentar',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+                }
+            });
+        }
+    });
+</script>
 

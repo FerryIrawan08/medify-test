@@ -23,7 +23,7 @@ class MasterItemsController extends Controller
         $data_search = MasterItem::query();
 
         if ($request->filled('kode')) {
-            $data_search = $data_search->where('kode', $kode);
+            $data_search = $data_search->where('kode', 'LIKE', '%' . $kode . '%');
         }
         if ($request->filled('nama')) {
             $data_search = $data_search->where('nama', 'LIKE', '%' . $nama . '%');
@@ -46,7 +46,18 @@ class MasterItemsController extends Controller
     public function formView($method, $id = 0)
     {
         if ($method == 'new') {
-            $item = (object)[];
+            $lastId = MasterItem::withTrashed()->max('id') ?? 0;
+            $nextKode = 'MED-' . str_pad($lastId + 1, 3, '0', STR_PAD_LEFT);
+            $item = (object)[
+                'id' => null,
+                'kode' => $nextKode,
+                'nama' => '',
+                'harga_beli' => '',
+                'laba' => '',
+                'supplier' => '',
+                'jenis' => '',
+                'foto' => null
+            ];
             $selected_kategori_ids = [];
         } else {
             $item = MasterItem::with('kategoris')->findOrFail($id);
@@ -74,19 +85,22 @@ class MasterItemsController extends Controller
         }
 
         $request->validate([
-            'nama' => 'required',
+            'nama' => 'required|string|max:255',
             'harga_beli' => 'required|numeric',
             'laba' => 'required|numeric',
-            'supplier' => 'required',
-            'jenis' => 'required',
+            'supplier' => 'required|string',
+            'jenis' => 'required|string',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048'
         ]);
 
         if ($method == 'new') {
             $data_item = new MasterItem;
-            $kode = MasterItem::count('id');
-            $kode = $kode + 1;
-            $kode = str_pad($kode, 5, '0', STR_PAD_LEFT);
+            if ($request->filled('kode_barang')) {
+                $kode = $request->kode_barang;
+            } else {
+                $lastId = MasterItem::withTrashed()->max('id') ?? 0;
+                $kode = 'MED-' . str_pad($lastId + 1, 3, '0', STR_PAD_LEFT);
+            }
         } else {
             $data_item = MasterItem::findOrFail($id);
             $kode = $data_item->kode;
@@ -117,13 +131,18 @@ class MasterItemsController extends Controller
         // Sync many-to-many categories
         $data_item->kategoris()->sync($request->kategori_ids ?? []);
 
-        return redirect('master-items');
+        $msg = $method == 'new' ? 'Master Item baru berhasil ditambahkan!' : 'Master Item berhasil diperbarui!';
+        return redirect('master-items')->with('success', $msg);
     }
 
     public function delete($id)
     {
-        MasterItem::find($id)->delete();
-        return redirect('master-items');
+        $item = MasterItem::find($id);
+        if ($item) {
+            $item->delete();
+            return redirect('master-items')->with('success', 'Master Item berhasil dihapus!');
+        }
+        return redirect('master-items')->with('error', 'Master Item tidak ditemukan.');
     }
 
     public function exportExcel()

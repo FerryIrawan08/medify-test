@@ -1,10 +1,10 @@
-<table id="table" class="table table-striped" style="width:100%">
+<table id="table" class="table table-striped align-middle" style="width:100%">
     <thead>
         <tr>
-            <th>Kode</th>
+            <th style="width: 120px;">Kode</th>
             <th>Nama</th>
-            <th>Jumlah Item</th>
-            <th>Aksi</th>
+            <th style="width: 140px;">Jumlah Item</th>
+            <th class="text-center" style="width: 80px;">Aksi</th>
         </tr>
     </thead>
     <tbody>

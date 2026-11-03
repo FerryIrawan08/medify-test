@@ -39,6 +39,16 @@
             }
         });
 
+        // Debounce Filter on typing (350ms delay)
+        var filterDebounceTimer = null;
+        $(document).on('input keyup', '.filter-debounce', function() {
+            clearTimeout(filterDebounceTimer);
+            $('#loading-filter').show();
+            filterDebounceTimer = setTimeout(function() {
+                getData();
+            }, 350);
+        });
+
         // Reset filter button
         $('#btn-reset-filter').click(function() {
             $('#filter-kode').val('');
@@ -47,10 +57,6 @@
             $('#filter-harga-max').val('');
             getData();
         });
-    });
-
-    $('.btn-get-data').click(function() {
-        getData();
     });
 
     function getData() {

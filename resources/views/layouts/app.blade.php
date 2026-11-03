@@ -88,9 +88,8 @@
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                    {{ __('Logout') }}
+                                <a class="dropdown-item btn-logout" href="{{ route('logout') }}">
+                                    <i class="bi bi-box-arrow-right me-1 text-danger"></i> {{ __('Logout') }}
                                 </a>
 
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
@@ -109,6 +108,102 @@
             @yield('content')
         </main>
     </div>
+
+    <!-- Global jQuery & SweetAlert2 -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(document).ready(function() {
+            // Flash Message SweetAlert
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: "{{ session('success') }}",
+                    timer: 3000,
+                    showConfirmButton: false,
+                    timerProgressBar: true
+                });
+            @endif
+
+            @if (session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal!',
+                    text: "{{ session('error') }}"
+                });
+            @endif
+
+            @if (session('warning'))
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Perhatian!',
+                    text: "{{ session('warning') }}"
+                });
+            @endif
+
+            @if (session('info'))
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Informasi',
+                    text: "{{ session('info') }}"
+                });
+            @endif
+
+            // Global SweetAlert Confirmation for Delete
+            $(document).on('click', '.btn-delete, a[href*="/delete/"]', function(e) {
+                e.preventDefault();
+                var url = $(this).attr('href');
+                var textMsg = $(this).data('confirm-text') || 'Data yang dihapus akan dipindahkan ke tempat sampah dan dapat dipulihkan.';
+
+                Swal.fire({
+                    title: 'Apakah Anda Yakin?',
+                    text: textMsg,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#dc3545',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: '<i class="bi bi-trash me-1"></i> Ya, Hapus!',
+                    cancelButtonText: 'Batal',
+                    reverseButtons: true,
+                    focusCancel: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: 'Menghapus Data...',
+                            text: 'Mohon tunggu sebentar',
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
+                        window.location.href = url;
+                    }
+                });
+            });
+
+            // SweetAlert Confirmation for Logout
+            $(document).on('click', '.btn-logout', function(e) {
+                e.preventDefault();
+                Swal.fire({
+                    title: 'Keluar dari Sistem?',
+                    text: 'Apakah Anda yakin ingin mengakhiri sesi ini?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#dc3545',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: '<i class="bi bi-box-arrow-right me-1"></i> Logout',
+                    cancelButtonText: 'Batal',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById('logout-form').submit();
+                    }
+                });
+            });
+        });
+    </script>
+
     @yield('js')
 </body>
 
